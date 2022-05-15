@@ -1,0 +1,31 @@
+* {
+  box-sizing: border-box;
+}
+
+header {
+  background-color: blanchedalmond;
+  padding: 1rem;
+}
+
+input, textarea {
+  margin: 1rem;
+}
+
+table, th, td {
+  margin: 1rem;
+  border: 1px solid black;
+}
+
+td {
+  width: 5rem;
+}
+
+.grid-container div {
+  border: 1px solid black;
+  padding: 0.2rem;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: 100px 50px 50px 50px 50px;
+  background: blanchedalmond;
+}
