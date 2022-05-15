@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/quadratic-xml-converter/static/css/main.313c185f.css",
+    "main.js": "/quadratic-xml-converter/static/js/main.838bef74.js",
+    "index.html": "/quadratic-xml-converter/index.html",
+    "main.313c185f.css.map": "/quadratic-xml-converter/static/css/main.313c185f.css.map",
+    "main.838bef74.js.map": "/quadratic-xml-converter/static/js/main.838bef74.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.313c185f.css",
+    "static/js/main.838bef74.js"
+  ]
+}
