@@ -7,7 +7,7 @@ header {
   padding: 1rem;
 }
 
-a, button, label, p, input, textarea {
+button, label, p, input, textarea {
   margin: 1rem;
 }
 
@@ -24,8 +24,22 @@ td {
   border: 1px solid black;
   padding: 0.2rem;
 }
+
 .grid-container {
   display: grid;
   grid-template-columns: 100px 50px 50px 50px 50px;
   background: blanchedalmond;
 }
+
+a {
+  margin: 1rem;
+}
+/* .dlink {
+  padding: 1rem;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: lightgray;
+  color: black;
+  text-decoration: none;
+  margin: 2rem;
+} */

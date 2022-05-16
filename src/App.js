@@ -6,29 +6,21 @@ export default function App()
 {
     function importPXML() 
     {
-        const content = document.querySelector('.content');
+        // const content = document.querySelector('.content');
         const [file] = document.querySelector('input[type=file]').files;
         const reader = new FileReader();
   
         reader.addEventListener("load", () => {
-        // this will then display a text file
-        content.innerText = reader.result;
+        // content.innerText = reader.result;
         processFileContent(reader.result)
         }, false);
   
         if (file) {
         reader.readAsText(file);
-        // processFileContent(reader.readAsText(file))
         }
     }
     
     const [points, setPoints] = React.useState([])
-    const [xmlContent, setXMLContent] = React.useState('Temp')
-
-    function showLegend() {
-      console.log('Show legend')
-
-    }
 
     function setDummy1(pointID, value)
     {
@@ -46,33 +38,31 @@ export default function App()
 
     function createProcessedXML()
     {
-        let zone='<ZONE>'
+        let zone='<ZONE>\n'
         for(var point of points)
         {
-          // console.log(`<POINT x="${point.x}" y="${point.y}"/>`)
-            zone = zone.concat(`<POINT x="${point.x}" y="${point.y}" dummy1="${point.dummy1}" dummy2="${point.dummy2}"/>`)
+            zone = zone.concat(`\t<POINT x="${point.x}" y="${point.y}" dummy1="${point.dummy1}" dummy2="${point.dummy2}"/>\n`)
         }
         zone = zone.concat('</ZONE>')
 
-        console.log(`ZONE: ${zone}`)
         return zone
     }
 
-    function downloadXML() {
-      console.log('Inside DownloadXML')
-      var a = document.getElementById('a')
-      var xml = createProcessedXML();
-      console.log(xml)
-      if(a)
-      {
-        var file = new Blob([xml], {type: 'text/xml'});
-        a.href = URL.createObjectURL(file);
-        a.download = 'processed.xml';
-      }
-      else
-        console.log('No Anchor tag');
-    }    
-    const setButton  = <button onClick={showLegend}>Set Value</button>
+    function downloadXML() 
+    {
+        var a = document.getElementById('a')
+        var xml = createProcessedXML();
+        console.log(xml)
+        if(a)
+        {
+            var file = new Blob([xml], {type: 'text/xml'});
+            a.href = URL.createObjectURL(file);
+            a.download = 'processed.xml';
+        }
+        else
+            console.log('No Anchor tag');
+    }
+
     const result = points.map(point => (
       <>
             <tr>
@@ -111,29 +101,24 @@ export default function App()
           <label for="pxml">Choose a PXML file to process:</label>
           <input type='file' id='pxml' onChange={importPXML} />
           <br/>
-          <p>Raw PXML file contents:</p>
-          <textarea className='content'></textarea>
+          {/* <p>Raw PXML file contents:</p> */}
+          {/* <textarea className='content'></textarea> */}
+          <br/>
+          {/* { points.length > 0 && <a href=''>Download file</a>} */}
           <p>PXML file contents to update:</p>
           {contentsTable}
           <hr></hr>
-          <a href='' id="a">Download Processed XML File</a>
-          <button onClick={downloadXML}>Create file</button>
+          { points.length > 0 && downloadXML(), <div className='dlink'><a href='' id="a">Download Processed XML File</a></div> }
+          {/* <button onClick={downloadXML}>Create file</button> */}
           {/* <p>{xmlContent}</p> */}
         </div>
     )
     
     function processFileContent(content) 
     {
-        console.log('Processing file content')
             console.log(content)
-        // console.log(content)
-        // if(window.DOMParser)
-        {
-            console.log('Here')
             let parser = new DOMParser();
             let xmlDoc = parser.parseFromString(content, 'text/xml');
-            console.log('Parsed')
-            // console.log(xmlDoc.getElementsByTagName('Slab')[0]);
             const points3 = xmlDoc.getElementsByTagName('SVertex')
 
             var doc = document.implementation.createDocument("", "", null)
@@ -145,7 +130,6 @@ export default function App()
 
             for(let point of points3) {
                 pointId = pointId + 1
-                // console.log(`Point id is ${pointId}`)
                 setPoints(points2 => (
                   [...points2, 
                     {
@@ -158,30 +142,16 @@ export default function App()
                   ]
                   ))
                 var pointElem = doc.createElement('POINT')
-                // console.log(`X: ${point.children[0].textContent}, Y: ${point.children[1].textContent}`)
                 pointElem.setAttribute('x', point.children[0].textContent)
                 pointElem.setAttribute('y', point.children[1].textContent)
                 
-                // console.log(point)
                 zoneElem.appendChild(pointElem)
             }
 
-            var outPoints = doc.getElementsByTagName('POINT')
-
-            for(let point of points)
-            {
-              console.log(`Outpoints: ${point.id}`)
-            }
-            // setXMLContent(doc)
-            // console.log(doc)
             var xmlText = new XMLSerializer().serializeToString(doc)
             var xmlTextNode = document.createTextNode(xmlText)
             console.log(xmlTextNode)
-            // setXMLContent(xmlTextNode.wholeText)
-            // console.log(zones[0].getElementsByTagName('SVertext')[0])
-        } 
-        // else
-            // console.log('Hear hear')       
+            downloadXML()
     }
 }
         // <tbody>{points}</tbody>
