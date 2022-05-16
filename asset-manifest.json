@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/quadratic-xml-converter/static/css/main.9d2a7730.css",
-    "main.js": "/quadratic-xml-converter/static/js/main.fad2c1dc.js",
+    "main.js": "/quadratic-xml-converter/static/js/main.2b49dde6.js",
     "index.html": "/quadratic-xml-converter/index.html",
     "main.9d2a7730.css.map": "/quadratic-xml-converter/static/css/main.9d2a7730.css.map",
-    "main.fad2c1dc.js.map": "/quadratic-xml-converter/static/js/main.fad2c1dc.js.map"
+    "main.2b49dde6.js.map": "/quadratic-xml-converter/static/js/main.2b49dde6.js.map"
   },
   "entrypoints": [
     "static/css/main.9d2a7730.css",
-    "static/js/main.fad2c1dc.js"
+    "static/js/main.2b49dde6.js"
   ]
 }
