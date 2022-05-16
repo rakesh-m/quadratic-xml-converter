@@ -130,17 +130,15 @@ export default function App()
 
             for(let point of points3) {
                 pointId = pointId + 1
-                setPoints(points2 => (
-                  [...points2, 
-                    {
-                        id: pointId,
-                        x: point.children[0].textContent, 
-                        y: point.children[1].textContent,
-                        dummy1: 0,
-                        dummy2: 0
-                    }
-                  ]
-                  ))
+                console.log(`Point id is ${pointId}`)
+                const newPoint = {
+                  id: pointId,
+                  x: point.children[0].textContent, 
+                  y: point.children[1].textContent,
+                  dummy1: 0,
+                  dummy2: 0
+                }
+                setPoints(points2 => ([...points2, newPoint]))
                 var pointElem = doc.createElement('POINT')
                 pointElem.setAttribute('x', point.children[0].textContent)
                 pointElem.setAttribute('y', point.children[1].textContent)
