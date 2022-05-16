@@ -37,38 +37,88 @@ export default function App()
         setPoints(newPoints)
     }
 
+    function setDummy2(pointID, value)
+    {
+        console.log(`Dummy 2 set for point ${pointID} to ${value}`)
+        const newPoints= points.map(point => pointID === point.id ? {...point, dummy2: value} : point)
+        setPoints(newPoints)
+    }
+
+    function createProcessedXML()
+    {
+        let zone='<ZONE>'
+        for(var point of points)
+        {
+          // console.log(`<POINT x="${point.x}" y="${point.y}"/>`)
+            zone = zone.concat(`<POINT x="${point.x}" y="${point.y}" dummy1="${point.dummy1}" dummy2="${point.dummy2}"/>`)
+        }
+        zone = zone.concat('</ZONE>')
+
+        console.log(`ZONE: ${zone}`)
+        return zone
+    }
+
+    function downloadXML() {
+      console.log('Inside DownloadXML')
+      var a = document.getElementById('a')
+      var xml = createProcessedXML();
+      console.log(xml)
+      if(a)
+      {
+        var file = new Blob([xml], {type: 'text/xml'});
+        a.href = URL.createObjectURL(file);
+        a.download = 'processed.xml';
+      }
+      else
+        console.log('No Anchor tag');
+    }    
     const setButton  = <button onClick={showLegend}>Set Value</button>
     const result = points.map(point => (
-    <tr>
-      <td>{point.x}</td>
-      <td>{point.y}</td>
-      <td>{point.dummy1}</td>
-      <td>{<Legend handleClick={setDummy1} id={point.id}/>}</td>
-      <td>{point.dummy2}</td>
-      <td>{<Legend/>}</td>
-    </tr>
+      <>
+            <tr>
+              <td>{point.x}</td>
+              <td>{point.y}</td>
+              <td>{point.dummy1}</td>
+              <td>{<Legend handleClick={setDummy1} id={point.id}/>}</td>
+              <td>{point.dummy2}</td>
+              <td>{<Legend handleClick={setDummy2} id={point.id}/>}</td>
+            </tr>
+      </>
     ))
+
+    const contentsTable = (
+      <table>
+      <thead>
+          <tr>
+            <th>X</th>
+            <th>Y</th>
+            <th>Dummy 1</th>
+            <th>Set Dummy 1</th>
+            <th>Dummy 2</th>
+            <th>Set Dummy 2</th>
+          </tr>
+        </thead>
+        <tbody>
+          {result}
+      </tbody>
+    </table>
+    )
+
     return (
-        <div>
-          <header>Quadratic</header>
+      <div>
+          <header>Quadratic Solutions - XML Converter</header>
           {/* <Legend /> */}
-          <input type='file' onChange={importPXML} />
+          <label for="pxml">Choose a PXML file to process:</label>
+          <input type='file' id='pxml' onChange={importPXML} />
+          <br/>
+          <p>Raw PXML file contents:</p>
           <textarea className='content'></textarea>
-          <table>
-            <thead>
-              <tr>
-                <th>X</th>
-                <th>Y</th>
-                <th>Dummy 1</th>
-                <th>Set Dummy 1</th>
-                <th>Dummy 2</th>
-                <th>Set Dummy 2</th>
-              </tr>
-            </thead>
-          <tbody>{result}</tbody>
-          </table>
+          <p>PXML file contents to update:</p>
+          {contentsTable}
           <hr></hr>
-          <p>{xmlContent}</p>
+          <a href='' id="a">Download Processed XML File</a>
+          <button onClick={downloadXML}>Create file</button>
+          {/* <p>{xmlContent}</p> */}
         </div>
     )
     

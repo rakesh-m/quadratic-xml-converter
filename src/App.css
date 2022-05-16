@@ -7,7 +7,7 @@ header {
   padding: 1rem;
 }
 
-input, textarea {
+a, button, label, p, input, textarea {
   margin: 1rem;
 }
 
