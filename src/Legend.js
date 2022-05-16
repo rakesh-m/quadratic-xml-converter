@@ -20,7 +20,7 @@ export default function Legend(props)
                 <div onClick={()=> props.handleClick(props.id, 100)}>100</div>
                 <div onClick={()=> props.handleClick(props.id, 10)}>10</div>
                 <div onClick={()=> props.handleClick(props.id, 0)}>0</div>
-                <div>T</div>
+                <div>L</div>
                 <div onClick={()=> props.handleClick(props.id, -10)}>-10</div>
                 <div onClick={()=> props.handleClick(props.id, 100)}>100</div>
                 <div onClick={()=> props.handleClick(props.id, -10)}>-10</div>
