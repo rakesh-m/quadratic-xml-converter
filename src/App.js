@@ -54,7 +54,7 @@ export default function App()
             const zonePoints = points.filter(point => point.zone == zone)
             for(var point of zonePoints)
             {
-              console.log(`Zone: ${zone}, Point: ${point}`)
+              console.log(`Zone: ${zone}, Point: ${point.id}`)
                 finalXML = finalXML.concat(`\t<POINT x="${point.x}" y="${point.y}" oimpl="${point.oimpl}" dummy2="${point.dummy2}"/>\n`)
             }
             finalXML = finalXML.concat('</ZONE>\n')
@@ -139,29 +139,65 @@ export default function App()
 
         var zoneId = 0
 
+        const newPoints = []
+
         for(let zone of zones)
         {
             zoneId = zoneId + 1
             const points = zone.getElementsByTagName('SVertex')
-                
-            var pointId = 0
 
-            for(let point of points) 
+            // var pointId = 0
+            var newPoint
+            for(var i = 0; i < points.length; i ++)
             {
-              pointId = pointId + 1
-              // console.log(`Point id is ${pointId}`)
+                // pointId = pointId + 1
+                
+                if(i == 0)
+                {
+                  console.log('Inside if: ', i + 1)
+                  newPoint = {
+                    zone: zoneId,
+                    id: i + 1,
+                    x: points[i].children[0].textContent,
+                    y: points[i].children[1].textContent,
+                    oimpl: 0,
+                    dummy2: 0
+                  }
+                  
+                }
+                else
+                {
+                  console.log('Inside else: ', i+1)
+                  newPoint = {
+                    zone: zoneId,
+                    id: i + 1,
+                    x: points[i].children[0].textContent - points[i - 1].children[0].textContent,
+                    y: points[i].children[0].textContent - points[i - 1].children[1].textContent,
+                    oimpl: 0,
+                    dummy2: 0
+                  }
+                }
+            
+            // var pointId = 0
 
-              const newPoint = {
-                zone: zoneId,
-                id: pointId,
-                x: point.children[0].textContent, 
-                y: point.children[1].textContent,
-                oimpl: 0,
-                dummy2: 0
-              }
+            // for(let point of points) 
+            // {
+            //   pointId = pointId + 1
+            //   // console.log(`Point id is ${pointId}`)
 
-              setPoints(prevPoints => ([...prevPoints, newPoint]))
-          }
+            //   const newPoint = {
+            //     zone: zoneId,
+            //     id: pointId,
+            //     x: point.children[0].textContent, 
+            //     y: point.children[1].textContent,
+            //     oimpl: 0,
+            //     dummy2: 0
+            //   }
+
+              console.log(`Point r: ${newPoint.id}`)
+              newPoints.push(newPoint)
+            }
+            setPoints(newPoints)
 
           downloadXML()
 
