@@ -4,6 +4,7 @@
 
 header {
   background-color: blanchedalmond;
+  box-shadow: 2px 2px 2px burlywood;
   padding: 1rem;
 }
 
@@ -31,15 +32,22 @@ td {
   background: blanchedalmond;
 }
 
+.grid-container div:hover {
+  background: lightgray;
+}
+
 a {
   margin: 1rem;
 }
-/* .dlink {
-  padding: 1rem;
+
+.details {
   border: 1px solid black;
   border-radius: 5px;
-  background-color: lightgray;
-  color: black;
-  text-decoration: none;
-  margin: 2rem;
-} */
+  margin: 1rem;
+  background: blanchedalmond;
+  box-shadow: 2px 2px 2px burlywood;
+}
+
+thead {
+  background: blanchedalmond;
+}

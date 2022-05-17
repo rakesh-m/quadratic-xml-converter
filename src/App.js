@@ -49,7 +49,7 @@ export default function App()
         for(var zone of zones)
         {
           // console.log(`Zone: ${zone}`)
-            finalXML = finalXML.concat(`<ZONE id=${zone}>\n`)
+            finalXML = finalXML.concat(`<ZONE>\n`)
 
             const zonePoints = points.filter(point => point.zone == zone)
             for(var point of zonePoints)
@@ -122,6 +122,15 @@ export default function App()
           {/* <textarea className='content'></textarea> */}
           <br/>
           {/* { points.length > 0 && <a href=''>Download file</a>} */}
+          <div className='details'>
+            <p>Conversion Details</p>
+            <ul>
+              <li>Each Zone in output corresponds to a Slab in the PXML.</li>
+              <li>Each Point in output corresponds to a SVertex inside the corresponding Slab.</li>
+              <li>Point X/Y = X/Y of next SVertex minus X/Y of the current SVertex</li>
+              <li>So, number of Points in a Zone are one less than number of SVertex in the Slab.</li>
+            </ul>
+          </div>
           <p>PXML file contents to update:</p>
           {contentsTable}
           <hr></hr>
@@ -148,26 +157,10 @@ export default function App()
 
             // var pointId = 0
             var newPoint
-            for(var i = 0; i < points.length; i ++)
+            for(var i = 1; i < points.length; i ++)
             {
                 // pointId = pointId + 1
                 
-                if(i == 0)
-                {
-                  console.log('Inside if: ', i + 1)
-                  newPoint = {
-                    zone: zoneId,
-                    id: i + 1,
-                    x: points[i].children[0].textContent,
-                    y: points[i].children[1].textContent,
-                    oimpl: 0,
-                    dummy2: 0
-                  }
-                  
-                }
-                else
-                {
-                  console.log('Inside else: ', i+1)
                   newPoint = {
                     zone: zoneId,
                     id: i + 1,
@@ -176,7 +169,6 @@ export default function App()
                     oimpl: 0,
                     dummy2: 0
                   }
-                }
             
             // var pointId = 0
 
