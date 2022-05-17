@@ -6,26 +6,25 @@ export default function App()
 {
     function importPXML() 
     {
-        // const content = document.querySelector('.content');
         const [file] = document.querySelector('input[type=file]').files;
         const reader = new FileReader();
   
         reader.addEventListener("load", () => {
-        // content.innerText = reader.result;
         processFileContent(reader.result)
         }, false);
   
-        if (file) {
-        reader.readAsText(file);
+        if (file) 
+        {
+            reader.readAsText(file);
         }
     }
     
     const [points, setPoints] = React.useState([])
 
-    function setDummy1(pointID, value)
+    function setOimpl(pointID, value)
     {
-        console.log(`Dummy 1 set for point ${pointID} to ${value}`)
-        const newPoints= points.map(point => pointID === point.id ? {...point, dummy1: value} : point)
+        console.log(`oimpl set for point ${pointID} to ${value}`)
+        const newPoints= points.map(point => pointID === point.id ? {...point, oimpl: value} : point)
         setPoints(newPoints)
     }
 
@@ -38,10 +37,11 @@ export default function App()
 
     function createProcessedXML()
     {
-        let zone='<ZONE>\n'
+        let zone='<?xml version="1" standalone="yes" ?>\n'
+        zone = zone.concat('<ZONE>\n')
         for(var point of points)
         {
-            zone = zone.concat(`\t<POINT x="${point.x}" y="${point.y}" dummy1="${point.dummy1}" dummy2="${point.dummy2}"/>\n`)
+            zone = zone.concat(`\t<POINT x="${point.x}" y="${point.y}" oimpl="${point.oimpl}" dummy2="${point.dummy2}"/>\n`)
         }
         zone = zone.concat('</ZONE>')
 
@@ -52,7 +52,7 @@ export default function App()
     {
         var a = document.getElementById('a')
         var xml = createProcessedXML();
-        console.log(xml)
+        // console.log(xml)
         if(a)
         {
             var file = new Blob([xml], {type: 'text/xml'});
@@ -66,10 +66,11 @@ export default function App()
     const result = points.map(point => (
       <>
             <tr>
+              <td>{point.zone}</td>
               <td>{point.x}</td>
               <td>{point.y}</td>
-              <td>{point.dummy1}</td>
-              <td>{<Legend handleClick={setDummy1} id={point.id}/>}</td>
+              <td>{point.oimpl}</td>
+              <td>{<Legend handleClick={setOimpl} id={point.id}/>}</td>
               <td>{point.dummy2}</td>
               <td>{<Legend handleClick={setDummy2} id={point.id}/>}</td>
             </tr>
@@ -77,21 +78,22 @@ export default function App()
     ))
 
     const contentsTable = (
-      <table>
-      <thead>
-          <tr>
-            <th>X</th>
-            <th>Y</th>
-            <th>Dummy 1</th>
-            <th>Set Dummy 1</th>
-            <th>Dummy 2</th>
-            <th>Set Dummy 2</th>
-          </tr>
-        </thead>
+        <table>
+            <thead>
+                <tr>
+                    <th>Zone</th>
+                    <th>X</th>
+                    <th>Y</th>
+                    <th>oimpl</th>
+                    <th>Set oimpl</th>
+                    <th>Dummy 2</th>
+                    <th>Set Dummy 2</th>
+                </tr>
+            </thead>
         <tbody>
-          {result}
-      </tbody>
-    </table>
+        {result}
+        </tbody>
+      </table>
     )
 
     return (
@@ -116,40 +118,38 @@ export default function App()
     
     function processFileContent(content) 
     {
-            console.log(content)
-            let parser = new DOMParser();
-            let xmlDoc = parser.parseFromString(content, 'text/xml');
-            const points3 = xmlDoc.getElementsByTagName('SVertex')
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(content, 'text/xml');
+        const zones = xmlDoc.getElementsByTagName('Slab')
 
-            var doc = document.implementation.createDocument("", "", null)
-            console.log(points3)
-            const zoneElem = document.createElement("ZONE");
-            doc.appendChild(zoneElem)
+        var zoneId = 0
 
+        for(let zone of zones)
+        {
+            zoneId = zoneId + 1
+            const points = zone.getElementsByTagName('SVertex')
+                
             var pointId = 0
 
-            for(let point of points3) {
-                pointId = pointId + 1
-                console.log(`Point id is ${pointId}`)
-                const newPoint = {
-                  id: pointId,
-                  x: point.children[0].textContent, 
-                  y: point.children[1].textContent,
-                  dummy1: 0,
-                  dummy2: 0
-                }
-                setPoints(points2 => ([...points2, newPoint]))
-                var pointElem = doc.createElement('POINT')
-                pointElem.setAttribute('x', point.children[0].textContent)
-                pointElem.setAttribute('y', point.children[1].textContent)
-                
-                zoneElem.appendChild(pointElem)
-            }
+            for(let point of points) 
+            {
+              pointId = pointId + 1
+              console.log(`Point id is ${pointId}`)
 
-            var xmlText = new XMLSerializer().serializeToString(doc)
-            var xmlTextNode = document.createTextNode(xmlText)
-            console.log(xmlTextNode)
-            downloadXML()
+              const newPoint = {
+                zone: zoneId,
+                id: pointId,
+                x: point.children[0].textContent, 
+                y: point.children[1].textContent,
+                oimpl: 0,
+                dummy2: 0
+              }
+
+              setPoints(prevPoints => ([...prevPoints, newPoint]))
+          }
+
+          downloadXML()
+
+        }
     }
 }
-        // <tbody>{points}</tbody>
