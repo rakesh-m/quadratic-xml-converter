@@ -37,15 +37,30 @@ export default function App()
 
     function createProcessedXML()
     {
-        let zone='<?xml version="1" standalone="yes" ?>\n'
-        zone = zone.concat('<ZONE>\n')
-        for(var point of points)
-        {
-            zone = zone.concat(`\t<POINT x="${point.x}" y="${point.y}" oimpl="${point.oimpl}" dummy2="${point.dummy2}"/>\n`)
-        }
-        zone = zone.concat('</ZONE>')
+      const allZones = points.map(point => point.zone)
+      // console.log(points)
+      const zonesSet = new Set(allZones)
+      // console.log(zonesSet)
+      if(zonesSet.size == 0) return
+      const zones = Array.from(zonesSet)
+      // console.log(`Zones: ${zones}`)
+        let finalXML='<?xml version="1" standalone="yes" ?>\n'
 
-        return zone
+        for(var zone of zones)
+        {
+          // console.log(`Zone: ${zone}`)
+            finalXML = finalXML.concat(`<ZONE id=${zone}>\n`)
+
+            const zonePoints = points.filter(point => point.zone == zone)
+            for(var point of zonePoints)
+            {
+              console.log(`Zone: ${zone}, Point: ${point}`)
+                finalXML = finalXML.concat(`\t<POINT x="${point.x}" y="${point.y}" oimpl="${point.oimpl}" dummy2="${point.dummy2}"/>\n`)
+            }
+            finalXML = finalXML.concat('</ZONE>\n')
+        }
+
+        return finalXML
     }
 
     function downloadXML() 
@@ -134,7 +149,7 @@ export default function App()
             for(let point of points) 
             {
               pointId = pointId + 1
-              console.log(`Point id is ${pointId}`)
+              // console.log(`Point id is ${pointId}`)
 
               const newPoint = {
                 zone: zoneId,
